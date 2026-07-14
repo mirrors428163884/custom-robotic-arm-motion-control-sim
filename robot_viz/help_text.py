@@ -14,6 +14,7 @@ def print_help(n_joints):
     print("  e          编辑当前关节 (键入数值)")
     print("  g          展开/收起右侧设置面板")
     print("  r          所有关节归零")
+    print("  p          显示/隐藏各 link 实时位姿 (HUD)")
     print("  c          打印当前关节角")
     print("  h          显示帮助")
     print("  q / ESC    退出")

@@ -9,6 +9,7 @@
 import numpy as np
 
 from .joint_utils import get_joint_limit
+from .kinematics_analysis import classify_structure, matrix_to_rpy
 from .scene_builder import sync_poses
 from .state import ViewerState
 
@@ -28,6 +29,12 @@ class RobotSceneController:
         self.robot_name = getattr(args, "robot", "robot")
 
         self.n_joints = robot.num_actuated_joints
+
+        # ---- 机械臂结构构型分类 (静态, 只算一次) ----
+        try:
+            self.structure = classify_structure(robot)
+        except Exception:
+            self.structure = "unknown"
 
         # ---- 交互状态 (dataclass) ----
         self.state = ViewerState(
@@ -104,6 +111,22 @@ class RobotSceneController:
             return tri_scene.graph.get(link_name)[0]
         except Exception:
             return np.eye(4)
+
+    def link_pose_rows(self):
+        """各 actuated 关节子 link 的实时世界位姿 (给 HUD 显示)。
+
+        返回 [(link_name, xyz(3,), rpy_deg(3,)), ...]。
+        """
+        rows = []
+        for idx in range(self.n_joints):
+            link = self._joint_child.get(idx)
+            if not link:
+                continue
+            T = np.asarray(self.link_world_pose(link), dtype=float)
+            xyz = T[:3, 3]
+            rpy = np.degrees(matrix_to_rpy(T[:3, :3]))
+            rows.append((link, xyz, rpy))
+        return rows
 
     def rebuild_world_axis(self, length):
         """按 length 重建世界坐标轴 node。"""

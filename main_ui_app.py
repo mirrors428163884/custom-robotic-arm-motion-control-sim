@@ -23,7 +23,7 @@ import argparse
 from robot_viz import (
     xacro_to_urdf, make_iiwa_top_level_xacro, load_robot,
     build_pyrender_scene, print_joint_angles, print_help,
-    RobotSceneController, JointViewer,
+    print_dh_table, RobotSceneController, JointViewer,
 )
 
 
@@ -54,6 +54,10 @@ def build_arg_parser():
     parser.add_argument(
         "--ui-scale", type=float, default=0.0, dest="ui_scale",
         help="UI 字体/面板缩放系数 (默认 0=按窗口高度自动, 4K 约 2x)",
+    )
+    parser.add_argument(
+        "--print-dh", action="store_true", dest="print_dh",
+        help="打印结构构型 + 标准 DH 参数表后退出 (无需显示环境)",
     )
     return parser
 
@@ -94,6 +98,12 @@ def main():
     print("      关节数: %d" % robot.num_actuated_joints)
     print("      关节名: %s" % robot.actuated_joint_names)
     print("      链接数: %d" % len(robot.link_map))
+
+    # ---- --print-dh: 打印构型 + DH 参数表后退出 (无需显示环境) ----
+    if getattr(args, "print_dh", False):
+        print()
+        print_dh_table(robot)
+        return
 
     # ---- 3/4 构建 pyrender 场景 ----
     print("[3/4] 构建 pyrender 场景 (pyglet 窗口) ...")

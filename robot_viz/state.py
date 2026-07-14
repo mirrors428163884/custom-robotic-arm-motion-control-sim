@@ -17,6 +17,7 @@ class ViewerState:
     selected: int = 0
     step: float = 0.05
     dirty: bool = True
+    show_link_poses: bool = True      # HUD 下方是否显示各 link 实时位姿
 
     # ---- 左侧悬浮输入面板 (immediate-mode) ----
     editing: Optional[int] = None     # 正在编辑的关节 idx, None=未编辑

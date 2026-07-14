@@ -6,6 +6,8 @@
 #    直接 pip install pyrender 会把 pyglet 升到 2.x, 故此处显式钳制。
 #  - numpy 2.x 已移除 np.infty, 脚本顶部已补 np.infty=np.inf 兼容 pyrender 0.1.45。
 #  - 需要系统级 OpenGL / GLFW 运行时与可用的显示环境 (X11)。
+#  - opencv-python 必须 < 5.0: handeye_calibration_demo.py 用 cv2.calibrateHandEye,
+#    该函数在 opencv 5.0 的 Python 绑定中缺失 (仅常量存在), 需用 4.x。
 
 # 直接依赖 (脚本 import)
 yourdfpy==0.0.60
@@ -14,6 +16,9 @@ pyglet<2.0
 trimesh==4.12.2
 xacro==2.1.1
 numpy>=2.0
+
+# 手眼标定示范 (handeye_calibration_demo.py)
+opencv-python>=4.5,<5.0
 
 # 关键后端依赖
 PyOpenGL==3.1.0

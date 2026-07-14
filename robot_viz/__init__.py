@@ -24,6 +24,9 @@ if not hasattr(_np, "infty"):
 from .urdf_loader import xacro_to_urdf, make_iiwa_top_level_xacro, load_robot
 from .scene_builder import build_pyrender_scene, compute_camera_pose, sync_poses
 from .joint_utils import get_joint_limit, format_joint_angles, print_joint_angles
+from .kinematics_analysis import (
+    matrix_to_rpy, classify_structure, extract_dh, print_dh_table,
+)
 from .state import ViewerState
 from .controller import RobotSceneController
 from .viewer import JointViewer
@@ -33,5 +36,6 @@ __all__ = [
     "xacro_to_urdf", "make_iiwa_top_level_xacro", "load_robot",
     "build_pyrender_scene", "compute_camera_pose", "sync_poses",
     "get_joint_limit", "format_joint_angles", "print_joint_angles",
+    "matrix_to_rpy", "classify_structure", "extract_dh", "print_dh_table",
     "ViewerState", "RobotSceneController", "JointViewer", "print_help",
 ]

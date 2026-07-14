@@ -219,6 +219,10 @@ class JointViewer(pyrender.Viewer):
         elif symbol == ord("r"):
             ctrl.reset_joints()
             print("[reset] 所有关节归零")
+        elif symbol == ord("p"):
+            st.show_link_poses = not st.show_link_poses
+            print("[hud] link 位姿显示 %s"
+                  % ("开" if st.show_link_poses else "关"))
         elif symbol == ord("c"):
             print_joint_angles(robot, st.selected)
         elif symbol == ord("h"):
@@ -340,6 +344,8 @@ class JointViewer(pyrender.Viewer):
              % (self._fps_value, self.viewport_size[0],
                 self.viewport_size[1], ctrl.robot_name, st.step),
              "header"),
+            ("STRUCTURE: %s  |  p=toggle link poses" % ctrl.structure,
+             "header"),
             ("", "header"),
         ]
         for i, name in enumerate(names):
@@ -356,6 +362,17 @@ class JointViewer(pyrender.Viewer):
                            np.degrees(float(cfg[i])), bar))
                 kind = "sel" if i == sel else "row"
             out.append((text, kind))
+
+        # ---- 各 link 实时世界位姿 ----
+        if st.show_link_poses:
+            out.append(("", "header"))
+            out.append(("-- LINK POSES (world) --  xyz[m]  rpy[deg]", "header"))
+            for link, xyz, rpy in ctrl.link_pose_rows():
+                text = ("  %-18s % .3f % .3f % .3f  |  "
+                        "% 6.1f % 6.1f % 6.1f"
+                        % (link, xyz[0], xyz[1], xyz[2],
+                           rpy[0], rpy[1], rpy[2]))
+                out.append((text, "pose"))
         return out
 
     def _draw_panel(self):
@@ -369,6 +386,7 @@ class JointViewer(pyrender.Viewer):
             "row": (0.92, 0.92, 0.96, 1.0),
             "sel": (0.55, 0.85, 1.00, 1.0),
             "edit": (1.00, 0.85, 0.30, 1.0),
+            "pose": (0.65, 0.90, 0.70, 1.0),
         }
         for i, (text, kind) in enumerate(self._panel_lines()):
             if not text:
