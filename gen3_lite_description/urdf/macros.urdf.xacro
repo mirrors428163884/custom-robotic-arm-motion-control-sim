@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+    <xacro:property name="M_PI" value="3.1415926535897931" />
+
+    <xacro:arg name="joint_limits" default="$(find gen3_lite_description)/config/joint_limits.yaml" />
+    <xacro:arg name="initial_position" default="$(find gen3_lite_description)/config/initial_position.yaml" />
+    <xacro:arg name="hardware" default="$(find gen3_lite_description)/config/hardware.yaml" />
+
+    <material name="gen3_lite_white">
+        <color rgba="0.803 0.824 0.820 1" />
+    </material>
+    <material name="camera_support_dark_gray">
+        <color rgba="0.25 0.25 0.25 1"/>
+    </material>
+
+    <xacro:property name="joint_limits_config" value="${xacro.load_yaml('$(arg joint_limits)')}" />
+    <xacro:property name="initial_positions_config" value="${xacro.load_yaml('$(arg initial_position)')}" />
+    <xacro:property name="hardware_config" value="${xacro.load_yaml('$(arg hardware)')}" />
+
+    <xacro:macro name="load_joint_limits" params="joint">
+    <!-- Position limits -->
+        <xacro:property name="min_${joint}_pos"
+            value="${joint_limits_config['joint_limits'][joint]['min_position']}" scope="parent" />
+        <xacro:property name="max_${joint}_pos"
+            value="${joint_limits_config['joint_limits'][joint]['max_position']}" scope="parent" />
+    <!-- Velocity limits -->
+        <xacro:property name="${joint}_vel"
+            value="${joint_limits_config['joint_limits'][joint]['max_velocity']}" scope="parent" />
+    <!-- Effort limits -->
+        <xacro:property name="${joint}_effort"
+            value="${joint_limits_config['joint_limits'][joint]['max_effort']}" scope="parent" />
+    <!-- Access initial positions -->
+        <xacro:property name="${joint}_initial"
+            value="${initial_positions_config['initial_positions'][joint]}" scope="parent" />
+    </xacro:macro>
+
+    <!-- Load properties for all 6 joints -->
+    <xacro:load_joint_limits joint="joint_1" />
+    <xacro:load_joint_limits joint="joint_2" />
+    <xacro:load_joint_limits joint="joint_3" />
+    <xacro:load_joint_limits joint="joint_4" />
+    <xacro:load_joint_limits joint="joint_5" />
+    <xacro:load_joint_limits joint="joint_6" />
+
+    <!-- Hardware Configuration -->
+    <xacro:property name="robot_ip" value="${hardware_config['hardware']['robot_ip']}" />
+    <xacro:property name="username" value="${hardware_config['hardware']['username']}" />
+    <xacro:property name="password" value="${hardware_config['hardware']['password']}" />
+    <xacro:property name="port" value="${hardware_config['hardware']['port']}" />
+    <xacro:property name="port_realtime" value="${hardware_config['hardware']['port_realtime']}" />
+    <xacro:property name="session_inactivity_timeout_ms" value="${hardware_config['hardware']['session_inactivity_timeout_ms']}" />
+    <xacro:property name="connection_inactivity_timeout_ms" value="${hardware_config['hardware']['connection_inactivity_timeout_ms']}" />
+    <xacro:property name="use_internal_bus_gripper_comm" value="${hardware_config['hardware']['use_internal_bus_gripper_comm']}" />
+    <xacro:property name="gripper_joint_name" value="${hardware_config['hardware']['gripper_joint_name']}" />
+    <xacro:property name="gripper_max_velocity" value="${hardware_config['hardware']['gripper_max_velocity']}" />
+    <xacro:property name="gripper_max_force" value="${hardware_config['hardware']['gripper_max_force']}" />
+
+</robot>

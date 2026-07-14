@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<robot name="$(arg name)" xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- Arguments -->
+    <xacro:arg name="name" default="gen3_lite"/>
+    <xacro:arg name="sim_gazebo" default="true" />
+    <xacro:arg name="use_camera" default="false" />
+    <xacro:arg name="prefix" default=""/>
+    <xacro:arg name="gripper" default="" />
+
+    <xacro:include filename="$(find gen3_lite_description)/urdf/camera/_materials.urdf.xacro" />
+    <xacro:include filename="$(find gen3_lite_description)/urdf/gen3_lite_macro.urdf.xacro" />
+
+    <link name="world"/>
+
+    <xacro:load_arm
+            parent="world"
+            prefix="$(arg prefix)"
+            sim_gazebo="$(arg sim_gazebo)"
+            gripper="$(arg gripper)"
+            use_camera="$(arg use_camera)">
+        <origin rpy="0 0 0" xyz="0 0 0" />
+    </xacro:load_arm>
+
+    <xacro:property name="gripper_pkg" value="$(arg gripper)_description" />
+
+    <xacro:unless value="${not '$(arg gripper)'}">
+        <xacro:include filename="$(find ${gripper_pkg})/urdf/$(arg gripper)_macro.urdf.xacro" />
+        <xacro:load_gripper
+            parent="${last_arm_link}"
+            prefix="$(arg prefix)"
+            sim_gazebo="$(arg sim_gazebo)">
+
+            <origin rpy="0 0 0" xyz="0 0 0" />
+        </xacro:load_gripper>
+    </xacro:unless>
+
+</robot>

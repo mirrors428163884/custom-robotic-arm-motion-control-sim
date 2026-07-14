@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="camera_inferior_support" params="
+      *origin
+      parent
+      prefix:=''">
+
+    <joint name="${prefix}camera_support_inferior_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${prefix}${parent}" />
+      <child link="${prefix}camera_support_inferior_link"/>
+    </joint>
+
+    <link name="${prefix}camera_support_inferior_link">
+      <visual>
+        <origin xyz="-0.064 0 -0.0125" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://gen3_lite_description/meshes/d435/anel_jackal.STL" scale="0.001 0.001 0.001" />
+        </geometry>
+        <material name="camera_support_dark_gray" />
+      </visual>
+      <collision>
+        <origin xyz="-0.064 0 -0.0125" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://gen3_lite_description/meshes/d435/anel_jackal.STL" scale="0.001 0.001 0.001" />
+        </geometry>
+      </collision>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="camera_superior_support" params="
+      *origin
+      parent
+      prefix:=''">
+    <joint name="${prefix}camera_support_superior_joint" type="fixed">
+      <xacro:insert_block name="origin" />
+      <parent link="${prefix}${parent}" />
+      <child link="${prefix}camera_support_superior_link" />
+    </joint>
+
+    <link name="${prefix}camera_support_superior_link">
+      <visual>
+        <origin xyz="-0.064 0 -0.0125" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://gen3_lite_description/meshes/d435/anel_jackal_superior_2.STL" scale="0.001 0.001 0.001" />
+        </geometry>
+        <material name="camera_support_dark_gray" />
+      </visual>
+      <collision>
+        <origin xyz="-0.064 0 -0.0125" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://gen3_lite_description/meshes/d435/anel_jackal_superior_2.STL" scale="0.001 0.001 0.001" />
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- <joint name="${prefix}camera_support_cylinder_joint" type="fixed">
+      <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0625 0.0" />
+      <parent link="${prefix}camera_support_superior_link" />
+      <child link="${prefix}camera_support_cylinder_link" />
+    </joint>
+
+    <link name="${prefix}camera_support_cylinder_link">
+      <visual>
+        <origin xyz="0.0 0 0.0" rpy="-${M_PI/2} 0 0" />
+        <geometry>
+          <cylinder radius="0.01156" length="0.0398" />
+        </geometry>
+        <material name="camera_support_dark_gray" />
+      </visual>
+      <collision>
+        <origin xyz="0.0 0 0.0" rpy="-${M_PI/2} 0 0" />
+        <geometry>
+          <cylinder radius="0.01156" length="0.0398" />
+        </geometry>
+      </collision>
+    </link> -->
+  </xacro:macro>
+</robot>

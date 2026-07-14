@@ -1,0 +1,20 @@
+# visualize_urdf.py 运行依赖 (conda 环境 mj311 / Python 3.11)
+# 安装:  pip install -r requirements.txt
+#
+# 注意事项 (详见 PITFALLS.md):
+#  - pyglet 必须 < 2.0: pyglet 2.x 会导致 pyrender 窗口黑屏。
+#    直接 pip install pyrender 会把 pyglet 升到 2.x, 故此处显式钳制。
+#  - numpy 2.x 已移除 np.infty, 脚本顶部已补 np.infty=np.inf 兼容 pyrender 0.1.45。
+#  - 需要系统级 OpenGL / GLFW 运行时与可用的显示环境 (X11)。
+
+# 直接依赖 (脚本 import)
+yourdfpy==0.0.60
+pyrender==0.1.45
+pyglet<2.0
+trimesh==4.12.2
+xacro==2.1.1
+numpy>=2.0
+
+# 关键后端依赖
+PyOpenGL==3.1.0
+</content>
